@@ -1,6 +1,5 @@
 ﻿using DesafioCalendario.Constants;
 using DesafioCalendario.libs;
-using DesafioCalendario.Models;
 using System.Collections.Generic;
 
 namespace DesafioCalendario
@@ -9,11 +8,12 @@ namespace DesafioCalendario
     {
         private static void Main(string[] args)
         {
-            List<IPregunta> preguntas = new Data().Preguntas;
+            List<string> preguntas = new Data().Preguntas;
             int cantidadSemanas = 6;
             Calendario calendario = new Calendario(preguntas, cantidadSemanas);
 
-            System.Console.WriteLine(calendario.GetPregunta().Contenido);
+            calendario.MostrarPregunta();
+            calendario.DebugTrucho();
         }
     }
 }
