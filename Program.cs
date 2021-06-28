@@ -9,11 +9,12 @@ namespace DesafioCalendario
         private static void Main(string[] args)
         {
             List<string> preguntas = new Data().Preguntas;
-            int cantidadSemanas = 6;
+            int cantidadSemanas = 36;
             Calendario calendario = new Calendario(preguntas, cantidadSemanas);
 
-            calendario.MostrarPregunta();
             calendario.DebugTrucho();
+            List<string> preguntasCalendarizadas = calendario.CalendarizarPreguntas();
+            preguntasCalendarizadas.ForEach((each) => System.Console.WriteLine(each));
         }
     }
 }
