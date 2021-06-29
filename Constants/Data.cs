@@ -6,10 +6,8 @@ namespace DesafioCalendario.Constants
     {
         private List<string> _preguntas = new List<string>{
                "1 + 1",
-               "1 + 2",
-                "1 + 3" ,
-                "2 * 2" ,
-                "4 + 1" };
+                "18.5 + 0.5",
+        };
 
         public List<string> Preguntas { get => _preguntas; set => _preguntas = value; }
     }

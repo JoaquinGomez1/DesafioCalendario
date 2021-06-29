@@ -17,6 +17,7 @@ namespace DesafioCalendario.libs
 
         public readonly List<string> _calendario = new List<string> { };
         private readonly Random random = new Random();
+        private int randomDos = 0;
 
         public Calendario(List<string> preguntas, int cantidadDeSemanas, string? fecha = null)
         {
@@ -27,7 +28,13 @@ namespace DesafioCalendario.libs
 
         public string GetPregunta()
         {
-            int randomIndex = new Random().Next(_preguntas.Count - 1);
+            int randomIndex = random.Next(_preguntas.Count);
+
+            while (randomIndex == randomDos)
+                randomIndex = random.Next(_preguntas.Count);
+
+            randomDos = randomIndex;
+
             return _preguntas[randomIndex];
         }
 
@@ -46,7 +53,7 @@ namespace DesafioCalendario.libs
             TimeSpan horaFinal = TimeSpan.FromHours(maximo);
 
             // Calcula la cantidad de minutos que hay en esa franja horaria
-            int maximoMinutos = (int)((horaFinal - horaInicial).TotalMinutes);
+            int maximoMinutos = (int)(horaFinal - horaInicial).TotalMinutes;
 
             // Y luego genera un numero aleatorio de minutos a agregar a la hora inicial
             int minutes = random.Next(maximoMinutos);
@@ -57,7 +64,21 @@ namespace DesafioCalendario.libs
         public DateTime GenerarDiaLaboralRandom(string fechaInicio)
         {
             DateTime fechaInicial = DateTime.Parse(fechaInicio);
-            DateTime fechaFinal = fechaInicial.AddDays(5);
+            int numeroDelDiaInicial = (int)fechaInicial.DayOfWeek;
+            DateTime fechaFinal;
+
+            if (numeroDelDiaInicial == 1)
+                fechaFinal = fechaInicial.AddDays(5); // Dias laborales
+            else
+            {
+                while (numeroDelDiaInicial != 1)
+                {
+                    fechaInicial = fechaInicial.AddDays(1);
+                    numeroDelDiaInicial = (int)fechaInicial.DayOfWeek;
+                };
+                fechaFinal = fechaInicial.AddDays(5);
+            }
+
             int rangoDeDias = (fechaFinal - fechaInicial).Days;
             int cantRandomDeDias = random.Next(rangoDeDias);
 
@@ -67,7 +88,7 @@ namespace DesafioCalendario.libs
         public List<string> CalendarizarPreguntas()
         {
             // Por ahora solamente le asigna una fecha y horario a una pregunta pero no se verifica la fecha en la que esta pregunta apareció
-            DateTime fechaDeInicio = DateTime.Parse(fechaLocal);
+            DateTime fechaDeInicio = DateTime.Parse("29/6/2021");
             for (int i = 0; i < _cantSemanas; i++)
             {
                 string preguntaLocal = GetPregunta();
@@ -77,21 +98,21 @@ namespace DesafioCalendario.libs
                 string fechaString = fecha.ToShortDateString();
                 string horario = GenerarHorarioRandom(9, 18).ToString();
 
-                _calendario.Add($"Fecha: {fechaString}, ||  Nombre del Dia: {fecha.DayOfWeek} || Hora: {horario} || Pregunta: {preguntaLocal}");
+                _calendario.Add($"Fecha: {fechaString},\t || Dia: {fecha.DayOfWeek}\t\t || Hora: {horario.Substring(0, 5)}\t || Pregunta: {preguntaLocal}");
             }
 
             return _calendario;
         }
 
-        public void MostrarPregunta() => Console.WriteLine(this.GetPregunta());
-
         public void DebugTrucho()
         {
-            string fechaDePrueba = DateTime.Now.ToShortDateString();
-            Console.WriteLine($"fechaLocal: {fechaLocal}");
+            string fechaDePrueba = "4/7/2021";
+            DateTime diaRandom = GenerarDiaLaboralRandom(fechaDePrueba);
+
+            Console.WriteLine($"fechaLocal: {fechaDePrueba}");
             Console.WriteLine($"_cantSemanas: {_cantSemanas}");
-            Console.WriteLine($"Es fin de semana: {EsFinDeSemana(fechaDePrueba)}");
-            Console.WriteLine($"Fecha Random: {GenerarDiaLaboralRandom(fechaDePrueba)}");
+            Console.WriteLine($"Es fin de semana: {diaRandom}");
+            Console.WriteLine($"Fecha Random: {diaRandom} Dia: {diaRandom.DayOfWeek} Numero De dia: {(int)diaRandom.DayOfWeek}");
             Console.WriteLine($"Horario Random: {GenerarHorarioRandom(9, 18)}");
             Console.WriteLine("\n");
         }

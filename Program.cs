@@ -9,7 +9,7 @@ namespace DesafioCalendario
         private static void Main(string[] args)
         {
             List<string> preguntas = new Data().Preguntas;
-            int cantidadSemanas = 36;
+            int cantidadSemanas = 30;
             Calendario calendario = new Calendario(preguntas, cantidadSemanas);
 
             calendario.DebugTrucho();
