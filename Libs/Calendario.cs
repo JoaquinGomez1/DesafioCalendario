@@ -30,7 +30,7 @@ namespace DesafioCalendario.libs
         {
             int randomIndex = random.Next(_preguntas.Count);
 
-            while (randomIndex == randomDos)
+            while (randomIndex == randomDos && _preguntas.Count != 1)
                 randomIndex = random.Next(_preguntas.Count);
 
             randomDos = randomIndex;
@@ -95,13 +95,35 @@ namespace DesafioCalendario.libs
 
                 string fechaDeLaSemana = fechaDeInicio.AddDays(i * 7).ToShortDateString();
                 DateTime fecha = GenerarDiaLaboralRandom(fechaDeLaSemana);
-                string fechaString = fecha.ToShortDateString();
+
                 string horario = GenerarHorarioRandom(9, 18).ToString();
 
-                _calendario.Add($"Fecha: {fechaString},\t || Dia: {fecha.DayOfWeek}\t\t || Hora: {horario.Substring(0, 5)}\t || Pregunta: {preguntaLocal}");
+                _calendario.Add($"Fecha: {FormatearFecha(fecha)},\t||Dia:{fecha.DayOfWeek}\t||Hora: {horario.Substring(0, 5)}\t||Pregunta: {preguntaLocal}");
             }
 
             return _calendario;
+        }
+
+        private string FormatearDia(DateTime fecha)
+        {
+            if (fecha.Day < 10) return $"0{fecha.ToShortDateString()}";
+            return fecha.ToShortDateString();
+        }
+
+        private string FormatearMes(string fecha)
+        {
+            string fechaString = fecha;
+            if (fecha[4] == '/') return fechaString.Insert(3, "0");
+            return fecha;
+        }
+
+        private string FormatearFecha(DateTime fecha)
+        {
+            string fechaTemporal = "";
+            fechaTemporal = FormatearDia(fecha);
+            fechaTemporal = FormatearMes(fechaTemporal);
+
+            return fechaTemporal;
         }
 
         public void DebugTrucho()
@@ -110,6 +132,7 @@ namespace DesafioCalendario.libs
             DateTime diaRandom = GenerarDiaLaboralRandom(fechaDePrueba);
 
             Console.WriteLine($"fechaLocal: {fechaDePrueba}");
+            Console.WriteLine($"Cantidad preguntas: {_preguntas.Count}");
             Console.WriteLine($"_cantSemanas: {_cantSemanas}");
             Console.WriteLine($"Es fin de semana: {diaRandom}");
             Console.WriteLine($"Fecha Random: {diaRandom} Dia: {diaRandom.DayOfWeek} Numero De dia: {(int)diaRandom.DayOfWeek}");
